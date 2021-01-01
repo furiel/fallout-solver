@@ -4,9 +4,9 @@
    [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]))
 
-(def state (atom {:input1 {:word "" :matches "0"}
-                  :input2 {:word "" :matches "0"}
-                  :input3 {:word "" :matches "0"}
+(def state (atom {:input1 {:word "" :matches ""}
+                  :input2 {:word "" :matches ""}
+                  :input3 {:word "" :matches ""}
                   :guesses ""}))
 
 (defn distance [x y]
