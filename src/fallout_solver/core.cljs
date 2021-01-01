@@ -21,6 +21,24 @@
       (when (not-empty word)
         (= (js/parseInt matches) (distance word guess))))))
 
+(defn letter?
+  "Tests if a character is a letter: [a-zA-Z]"
+  [c]
+  (re-matches #"[a-zA-Z]" c))
+
+(defn sanitize-word [word]
+  (-> (apply str (filter letter? word))
+      (clojure.string/upper-case)))
+
+(defn digit?
+  [c]
+  (re-matches #"\d" c))
+
+(defn sanitize-digit [word]
+  (apply str (filter digit? word)))
+
+(sanitize-word "ALma9d")
+
 (defn input-word [identifier]
   [:div
    [:input {:type "text"
@@ -30,12 +48,14 @@
             :value (get-in @state [identifier :word])
             :on-change (fn [event]
                          (swap! state assoc-in [identifier :word]
-                                (-> event .-target .-value)))}]
+                                (-> event .-target .-value
+                                    sanitize-word)))}]
    [:input {:type "text"
             :value (get-in @state [identifier :matches])
             :on-change (fn [event]
                          (swap! state assoc-in [identifier :matches]
-                                (-> event .-target .-value)))
+                                (-> event .-target .-value
+                                    sanitize-digit)))
             :placeholder "match"}]])
 
 (defn fallout-solver []
@@ -51,7 +71,8 @@
                :value (:guesses @state)
                :on-change (fn [event]
                             (swap! state assoc :guesses
-                                   (-> event .-target .-value)))}]])
+                                   (-> event .-target .-value
+                                       sanitize-word)))}]])
 
 (defn get-app-element []
   (gdom/getElement "app"))
