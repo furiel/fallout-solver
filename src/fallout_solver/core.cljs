@@ -37,7 +37,8 @@
 (defn sanitize-digit [word]
   (apply str (filter digit? word)))
 
-(sanitize-word "ALma9d")
+(defn sanitize-textarea [text]
+  (clojure.string/upper-case text))
 
 (defn input-word [identifier]
   [:div
@@ -72,7 +73,7 @@
                :on-change (fn [event]
                             (swap! state assoc :guesses
                                    (-> event .-target .-value
-                                       sanitize-word)))}]])
+                                       sanitize-textarea)))}]])
 
 (defn get-app-element []
   (gdom/getElement "app"))
